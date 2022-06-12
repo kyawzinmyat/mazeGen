@@ -1,5 +1,5 @@
 import random
-
+from collections import deque
 
 class Maze:
 	def __init__(self,row=None,col=None):
@@ -7,43 +7,47 @@ class Maze:
 		]
 		self.wall ="#"
 		self.space = " "
+		self.visited_cells =[]
+		self.visited_index = []	
 		if row and col:
 			self.generate_maze(row, col)	
+		
 	
 	def generate_maze(self,row,col):
 		self.maze =[[Cell([i,j]) for j in range(col)]for i in range(row) ]
 		self.maze_array =[[0 for j in range(3*col)]for i in range(3*row) ]
-		self.dfs()
+		self.dfs2()
 		self.convert_array()
 	
 	
 	def dfs(self):
-		self.visited_cells =[]
-		self.visited_index = []	
 		for i in range(len(self.maze)):
 			for j in range(len(self.maze[0])):
 				obj = self.maze[i][j]
-				if obj not in self.visited_cells and [i,j] not in self.visited_index:
+				if obj not in self.visited_cells and [i,j] not in self.visited_index and [i,j] not in self.visited_index:
 					self.visited_cells.append(obj)	
 					self.visited_index.append([i,j])	
-					#print(i,j)
+					#print("current cell",i,j)
 					next_cell= self.connect_cell(obj)
 					next_cell_obj = self.maze[next_cell[0]][next_cell[1]]
-					next_cell_obj.wall[obj.op[next_cell[2]]]=False
 					obj.wall[next_cell[2]]=False
+					next_cell_obj.wall[obj.op[next_cell[2]]]=False
+					#print(obj.wall)
 				
-					self._dfs(obj,self.maze[next_cell[0]][next_cell[1]])
+					self._dfs(obj,next_cell_obj)
 				
 	
 	def _dfs(self,pre_cell,current_cell):
 		self.visited_cells.append(current_cell)
-		#print(current_cell.index_)
+		#print("current cell",current_cell.index_)
 		self.visited_index.append(current_cell.index_)
 		next_cell= self.connect_cell(current_cell)
 		pre_cell.wall[next_cell[2]]=False
 		current_cell.wall[current_cell.op[next_cell[2]]]=False
-		if self.maze[next_cell[0]][next_cell[1]] not in self.visited_cells:
+		#print(current_cell.wall)
+		if self.maze[next_cell[0]][next_cell[1]] not in self.visited_cells and next_cell not in self.visited_index:
 			self._dfs(current_cell,self.maze[next_cell[0]][next_cell[1]])
+			#print("next cell",next_cell)
 		return 		
 		
 
@@ -54,6 +58,46 @@ class Maze:
 					#print("cell",cell)
 					next_cells.append(cell)
 		return random.choice(next_cells)
+
+	def get_neigh(self,cell_to_connect):
+		cells = []
+		for cell in self.get_index(cell_to_connect.index_):
+				if cell not in self.visited_index:
+					cells.append(cell)
+		#for cell in random.shuffle(cells):
+		#		print(cell)			
+					self.stack.appendleft(cell)
+
+		
+
+	def dfs2(self):
+		self.stack = deque()
+		self.stack.appendleft([0,0,None])
+		self.visited_index=[]
+		self.visited_cells = []
+		prev =None
+		while self.stack:
+			current_index = self.stack.popleft()
+			current_cell = self.maze[current_index[0]][current_index[1]]
+			if current_cell not in self.visited_cells and current_index not in self.visited_index:
+				self.visited_cells.append(current_cell)
+				self.visited_index.append(current_index)
+				if current_index[2]:
+					current_cell.wall[current_cell.op[current_index[2]]] = False
+				if prev:
+					prev.wall[current_index[2]]= False
+				self.get_neigh(current_cell)
+				prev=current_cell
+
+				
+			
+
+
+
+			
+
+
+
 		
 			
 		
@@ -96,7 +140,9 @@ class Maze:
 					list_of_index.append([index[0],index[1]+1,"right"])
 					#print(index,"right")
 									
+		random.shuffle(list_of_index)
 		return list_of_index
+
 
 	def convert_array(self):
 		self.maze_array = []
@@ -113,7 +159,7 @@ class Maze:
 				self.remove_wall(start,mid,cell,row,row2,row3)
 			self.maze_array.append(row)
 			self.maze_array.append(row2)
-			self.maze_array.append(row3)
+			#self.maze_array.append(row3)
 
 
 	def remove_wall(self,start,mid,cell,row,row2,row3):
@@ -177,9 +223,9 @@ class Cell:
 								
 												
 		
-#maze = Maze()
-#maze.generate_maze(7,30)
-#maze.print()
+maze = Maze()
+maze.generate_maze(7,20)
+maze.print()
 #maze.
 
 
