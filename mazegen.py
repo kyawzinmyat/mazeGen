@@ -2,11 +2,13 @@ import random
 
 
 class Maze:
-	def __init__(self):
+	def __init__(self,row=None,col=None):
 		self.maze =[
 		]
 		self.wall ="#"
-		self.space = " "	
+		self.space = " "
+		if row and col:
+			self.generate_maze(row, col)	
 	
 	def generate_maze(self,row,col):
 		self.maze =[[Cell([i,j]) for j in range(col)]for i in range(row) ]
@@ -133,6 +135,16 @@ class Maze:
 	def stop(self,stop,index):
 		self.stop = stop
 		self.maze_array[index[0]][index[1]] = self.stop
+	
+	def get_maze(self):
+		return self.maze_array
+	
+	def load_maze_csv(self):
+		with open("maze.csv","w+") as file:
+			for cells in self.maze_array:
+				for cell in cells:
+					file.write(cell)
+				file.write("\n")
 		
 		
 
@@ -165,9 +177,9 @@ class Cell:
 								
 												
 		
-maze = Maze()
-maze.generate_maze(7,30)
-maze.print()
+#maze = Maze()
+#maze.generate_maze(7,30)
+#maze.print()
 #maze.
 
 
