@@ -1,27 +1,26 @@
 from findpath import Dfs
 from mazegen import Maze
 
-maze = Maze(7,30)
-
-
-#maze.print()
-
-# you need to change through maze.csv
-
-#maze.load_maze_csv()
-#maze = maze.get_maze()
 
 from csvtolist import get_maze_list
 
+## generate maze
+def gen_maze():
+    maze = Maze()
+    maze.generate_maze(20,20,[0,1],[20,10])
+    maze.load_maze_csv()
+    #maze.print()
 
-maze = get_maze_list()
 
 
+def solve_maze(): 
+    gen_maze()
+    maze = get_maze_list('maze.csv')
+    dfs = Dfs()
+    dfs.set_maze(maze)
+    dfs.solve()
 
+if __name__ == '__main__':
+    solve_maze()
 
-
-dfs = Dfs()
-dfs.set_maze(maze)
-dfs.solve()
-dfs.maze.print()
 
