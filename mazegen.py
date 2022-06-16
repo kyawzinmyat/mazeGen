@@ -21,15 +21,17 @@ class Maze:
 		self.maze_array =[[0 for j in range(3*col)]for i in range(3*row) ]
 		self.dfs2(seed,end)
 		self.convert_array()
-		self.maze_array[seed[0]*2+1][seed[1]*2+1] = 'A'
-		self.maze_array[(end[0])*2-1][end[1]*3-2] = 'E'
-		self.dfs.set_maze(self.maze_array[:])
-		if not self.dfs.solve():		
-			self.dfs2(seed,end)
-			self.convert_array()
-			self.maze_array[seed[0]*2+1][seed[1]*2+1] = 'A'
-			self.maze_array[(end[0])*2-1][end[1]*3-2] = 'E'
+		if seed and end:
+			self.maze_array[seed[0]*3+1][seed[1]*2+1] = 'A'
+			self.maze_array[(end[0])*3-1][end[1]*3-2] = 'E'
 			self.dfs.set_maze(self.maze_array[:])
+			if not self.dfs.solve():		
+				self.dfs2(seed,end)
+				self.convert_array()
+				self.maze_array[seed[0]*3+1][seed[1]*2+1] = 'A'
+				self.maze_array[(end[0])*3-1][end[1]*3-2] = 'E'
+				self.dfs.set_maze(self.maze_array[:])
+		
 		return
 	
 	
@@ -98,6 +100,7 @@ class Maze:
 			current_index = self.stack.popleft()
 			current_cell = self.maze[current_index[0]][current_index[1]]
 			if end and  current_index[0] == end[0] and current_index[1] == end[1]:
+				self.dfs2()
 				break
 			if current_cell not in self.visited_cells: #and current_index not in self.visited_index:
 				#print(current_index)
@@ -177,7 +180,7 @@ class Maze:
 				mid = int((start+end)/2)	
 				row2[mid] = self.space
 				self.remove_wall(start,mid,cell,row,row2,row3)
-			#self.maze_array.append()
+			self.maze_array.append(row)
 			self.maze_array.append(row2)
 			self.maze_array.append(row3)
 
@@ -204,12 +207,15 @@ class Maze:
 	def get_maze(self):
 		return self.maze_array
 	
-	def load_maze_csv(self):
-		with open("maze.csv","w+") as file:
-			for cells in self.maze_array:
-				for cell in cells:
-					file.write(cell)
-				file.write("\n")
+	def load_maze_csv(self,filename = None):
+		filename = 'maze.csv'
+		if filename :
+			filenmae = filename
+		with open(filename,"w+") as file:
+				for cells in self.maze_array:
+					for cell in cells:
+						file.write(cell)
+					file.write("\n")
 		
 		
 

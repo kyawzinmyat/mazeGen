@@ -24,10 +24,11 @@ class Dfs:
 		self.nodelist =[]
 		self.mark="*"
 		
+		
 
 		
 
-	def traverse(self):
+	def traverse(self,fill):
 
 		self.frointer = [self.maze.get_index_of(self.maze.start)]
 
@@ -39,7 +40,7 @@ class Dfs:
 
 			self.visited.append(current_index) 
 
-			if self.check_is_end(current_index):
+			if self.check_is_end(current_index,fill):
 				return True
 			
 				
@@ -58,17 +59,18 @@ class Dfs:
 		self.maze.maze=new_maze				
 					
 
-	def check_is_end(self,current_index):
+	def check_is_end(self,current_index,fill):
 		#print(self.maze.maze[current_index[0]][current_index[1]])
 		if  self.maze.maze[current_index[0]][current_index[1]] ==self.maze.stop:## [0] is x [1] is y
-			return self.get_path()			
+			print("found")
+			return self.get_path(fill)			
 
 		return False
 		
 
-	def solve(self,show_full=False):
+	def solve(self,show_full=False,fill=True):
 
-		return self.traverse()
+		return self.traverse(fill)
 
 		if show_full:
 
@@ -83,7 +85,7 @@ class Dfs:
 
 	## find the actual path and make a list of index of that path
 
-	def  get_path(self):
+	def  get_path(self,fill):
 		current=[]
 
 		parent =None
@@ -107,7 +109,7 @@ class Dfs:
 
 				parent = node[1]
 
-		return self.fill_path(current)
+		return self.fill_path(current,fill)
 
 	
 
@@ -125,14 +127,14 @@ class Dfs:
 
 	# take the list of index of actual path and fill with char	
 
-	def fill_path(self,index_list):
-		copy = self.maze.maze[:]
-		for i in index_list:
+	def fill_path(self,index_list,fill):
+		if fill:
+			for i in index_list:
 
-				if copy[i[0]][i[1]]==self.maze.blank:
+				if self.maze.maze[i[0]][i[1]]==self.maze.blank:
 
-					copy[i[0]][i[1]]=self.mark
-		self.maze.print()
+					self.maze.maze[i[0]][i[1]]=self.mark
+		#self.maze.print()
 		return True
 	
 

@@ -1,3 +1,5 @@
+import random
+
 class Maze:
 	def __init__(self):
 		self.maze =[
@@ -56,6 +58,6 @@ class Maze:
 					list_of_index.append([index[0],index[1]+1])
 						
 	
-		
+		random.shuffle(list_of_index)
 				
 		return list_of_index
