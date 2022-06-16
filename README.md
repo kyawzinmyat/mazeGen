@@ -2,11 +2,14 @@
 
 generating 2d maze using randomized dfs
 
-maze = Maze()
-
-maze.generate_maze(7,30) # row and column
-
-maze.print()
-
-
 can integrate with dfsmaze to find the path !!
+
+
+api
+
+check run.py
+
+gen_maze function generate maze with optional parameter seed(start) and end  and run dfs inorder to gurantee that there is a path
+after generation the maze , its store in maze.csv file .
+
+solve function find the path 
