@@ -16,21 +16,24 @@ class Maze:
 		self.dfs = Dfs()
 		
 	
-	def generate_maze(self,row,col,seed = None , end = None):
+	def generate_maze(self,row,col,seed = None , end = None,fill = True):
 		self.maze =[[Cell([i,j]) for j in range(col)]for i in range(row) ]
 		self.maze_array =[[0 for j in range(3*col)]for i in range(3*row) ]
 		self.dfs2(seed,end)
 		self.convert_array()
+		counter = 0
 		if seed and end:
 			self.maze_array[seed[0]*3+1][seed[1]*2+1] = 'A'
 			self.maze_array[(end[0])*3-1][end[1]*3-2] = 'E'
 			self.dfs.set_maze(self.maze_array[:])
-			if not self.dfs.solve():		
+			while not self.dfs.solve(fill=False):		
 				self.dfs2(seed,end)
 				self.convert_array()
 				self.maze_array[seed[0]*3+1][seed[1]*2+1] = 'A'
 				self.maze_array[(end[0])*3-1][end[1]*3-2] = 'E'
-				self.dfs.set_maze(self.maze_array[:])
+				counter +=1
+				if counter > 100:
+					break
 		
 		return
 	
@@ -208,9 +211,9 @@ class Maze:
 		return self.maze_array
 	
 	def load_maze_csv(self,filename = None):
-		filename = 'maze.csv'
-		if filename :
-			filenmae = filename
+		
+		if not filename:
+			filename = "MAZE.CSV"
 		with open(filename,"w+") as file:
 				for cells in self.maze_array:
 					for cell in cells:
