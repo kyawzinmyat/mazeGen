@@ -35,7 +35,7 @@ class Maze:
 					return [i,j]
 			
 					
-	def get_index(self,index):
+	def get_index(self,index,shuffle=True):
 		list_of_index=[]
 		row_range=len(self.maze)
 		col_range=len(self.maze[0])
@@ -57,7 +57,7 @@ class Maze:
 			if self.maze[index[0]][index[1]+1]==self.blank or self.maze[index[0]][index[1]+1]==self.stop:
 					list_of_index.append([index[0],index[1]+1])
 						
-	
-		random.shuffle(list_of_index)
+		if shuffle:
+			random.shuffle(list_of_index)
 				
 		return list_of_index

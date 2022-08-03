@@ -26,11 +26,12 @@ class Maze:
 			self.maze_array[seed[0]*3+1][seed[1]*2+1] = 'A'
 			self.maze_array[(end[0])*3-1][end[1]*3-2] = 'E'
 			self.dfs.set_maze(self.maze_array[:])
-			while not self.dfs.solve(fill=False):		
+			while not self.dfs.solve(fill=False):	
+				print(counter)	
 				self.dfs2(seed,end)
 				self.convert_array()
-				self.maze_array[seed[0]*3+1][seed[1]*2+1] = 'A'
-				self.maze_array[(end[0])*3-1][end[1]*3-2] = 'E'
+				self.maze_array[random.randint(0,row)][random.randint(0,col)] = 'A'
+				self.maze_array[random.randint(o,row)][random.randint(0,col)] = 'E'
 				counter +=1
 				if counter > 100:
 					break
@@ -57,15 +58,12 @@ class Maze:
 	
 	def _dfs(self,pre_cell,current_cell):
 		self.visited_cells.append(current_cell)
-		#print("current cell",current_cell.index_)
 		self.visited_index.append(current_cell.index_)
 		next_cell= self.connect_cell(current_cell)
 		pre_cell.wall[next_cell[2]]=False
 		current_cell.wall[current_cell.op[next_cell[2]]]=False
-		#print(current_cell.wall)
 		if self.maze[next_cell[0]][next_cell[1]] not in self.visited_cells and next_cell not in self.visited_index:
 			self._dfs(current_cell,self.maze[next_cell[0]][next_cell[1]])
-			#print("next cell",next_cell)
 		return 		
 		
 

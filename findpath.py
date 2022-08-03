@@ -2,6 +2,9 @@
 from collections import deque
 from maze import Maze	
 
+import pygame
+max_width = 1000
+max_height = 800
 
 
 class Node:
@@ -28,7 +31,7 @@ class Dfs:
 
 		
 
-	def traverse(self,fill):
+	def traverse(self,fill, fun = None):
 
 		self.frointer = [self.maze.get_index_of(self.maze.start)]
 
@@ -53,6 +56,8 @@ class Dfs:
 
 					self.frointer.append(adj_index)
 		return False
+
+	
 
 	def set_maze(self,new_maze):
 
@@ -135,7 +140,14 @@ class Dfs:
 
 					self.maze.maze[i[0]][i[1]]=self.mark
 		#self.maze.print()
+		self.index_list = index_list
 		return True
+
+	def get_indexlist(self):
+		try:
+			return self.index_list
+		except:
+			return False
 	
 
 	# its show all the space explored
@@ -190,7 +202,7 @@ class Bfs:
 			
 				
 
-			for adj_index in self.maze.get_index(current_index):
+			for adj_index in self.maze.get_index(current_index,shuffle = False):
 
 				if  adj_index not in self.visited and adj_index not in self.frointer:
 
@@ -198,6 +210,7 @@ class Bfs:
 
 					self.frointer.append(adj_index)
 		return False
+
 
 	def set_maze(self,new_maze):
 
@@ -279,9 +292,14 @@ class Bfs:
 				if self.maze.maze[i[0]][i[1]]==self.maze.blank:
 
 					self.maze.maze[i[0]][i[1]]=self.mark
-		#self.maze.print()
+		self.index_list = index_list
 		return True
 	
+	def get_indexlist(self):
+		try:
+			return self.index_list
+		except:
+			return False
 
 	# its show all the space explored
 
@@ -292,3 +310,6 @@ class Bfs:
 
 			temp[i[0]][i[1]]="☆"
 		self.maze.print(temp)
+
+
+
