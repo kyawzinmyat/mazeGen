@@ -8,21 +8,21 @@ import time
 
 pygame.init()
 
-max_width = 1400
+max_width = 1500
 max_height = 800
 start = False
 
-screen = pygame.display.set_mode((max_width,max_height))
+#screen = pygame.display.set_mode((max_width,max_height))
+screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 
 global row
-row = 20
+row = 40
 
 global col
-col = 20
+col = 40
 
 def generate():
     try:
-        print("called generated") 
         maze = Maze()
         start = [random.randrange(row),random.randrange(col)]
         end = [random.randrange(row),random.randrange(col)]
@@ -105,24 +105,26 @@ def draw_rect_by_indecies(list_of_indices,maze, delay = 10, color = None):
         is_break = True
 
 
-def new_find_path_bfs():
+def new_find_path_bfs(show = False):
     try:
         maze = get_maze_list('maze2.csv')
         bfs = Bfs()
         bfs.set_maze(maze)
         bfs.solve(fill = False)
-        draw_rect_by_indecies(bfs.visited, maze, 100, (233,0,230,50))
+        if show:
+            draw_rect_by_indecies(bfs.visited, maze, 100, (233,0,230,50))
         draw_rect_by_indecies(bfs.get_indexlist()[::-1],maze) 
     except:
         pass
 
-def new_find_path_dfs():
+def new_find_path_dfs(show = False):
     try:
         maze = get_maze_list('maze2.csv')
         dfs = Dfs()
         dfs.set_maze(maze)
         dfs.solve(fill = False)
-        draw_rect_by_indecies(dfs.visited, maze, 100, (233,0,230,50))
+        if show:
+            draw_rect_by_indecies(dfs.visited, maze, 100, (233,0,230,50))
         draw_rect_by_indecies(dfs.get_indexlist()[::-1],maze) 
     except:
         pass
@@ -158,7 +160,7 @@ while running:
     font = pygame.font.SysFont('Arial', 15)
     
     but_gen = pygame.draw.rect(screen,"#16e0bd", (1000,200,150,50))
-    screen.blit(font.render('Generate new maze',True,(0,0,0,100)), (1015,213))
+    screen.blit(font.render('Generate new maze',True,(0,0,0,100)), (1010,213))
 
     but_dfs = pygame.draw.rect(screen,"#16e0bd", (1000,300,150,50))
     screen.blit(font.render('Show path(DFS)',True,(0,0,0,100)), (1020,315))
@@ -166,15 +168,38 @@ while running:
     but_bfs = pygame.draw.rect(screen,"#16e0bd", (1000,400,150,50))
     screen.blit(font.render('Show path(BFS)',True,(0,0,0,100)), (1025,415))
 
+    but_bfs_show = pygame.draw.rect(screen,"#16e0bd", (1000,500,150,50))
+    screen.blit(font.render('Show path(DFS)2',True,(0,0,0,100)), (1020,515))
+
+    but_bfs = pygame.draw.rect(screen,"#16e0bd", (1000,600,150,50))
+    screen.blit(font.render('Show path(BFS)2',True,(0,0,0,100)), (1025,615))
+
     but_quit = pygame.draw.rect(screen,"#ff0000", (1000,100,150,50))
-    screen.blit(font.render('Exit ?',True,(0,0,0,100)), (1025,113))
+    screen.blit(font.render('Exit ?',True,(0,0,0,100)), (1035,113))
     
     ### show path
     if check_mouse(1000,300,50,150):
         pygame.draw.rect(screen,"#00ff00", (1000,300,150,50),width=3)
         if pygame.mouse.get_pressed()[0] == 1:
-            #show_path_dfs()
             new_find_path_dfs()
+
+    
+    elif check_mouse(1000, 400,50,150):
+        pygame.draw.rect(screen,"#00ff00", (1000,400,150,50),width=3)
+        if pygame.mouse.get_pressed()[0] == 1:
+            #show_path_bfs()
+            new_find_path_bfs()
+    
+    elif check_mouse(1000,500,50,150):
+        pygame.draw.rect(screen,"#00ff00", (1000,500,150,50),width=3)
+        if pygame.mouse.get_pressed()[0] == 1:
+            new_find_path_dfs(True)
+
+    
+    elif check_mouse(1000, 600,50,150):
+        pygame.draw.rect(screen,"#00ff00", (1000,600,150,50),width=3)
+        if pygame.mouse.get_pressed()[0] == 1:
+            new_find_path_bfs(True)
 
     ##### gen  new maze
     elif check_mouse(1000,200,50,150):
@@ -182,25 +207,16 @@ while running:
         pygame.draw.rect(screen,"#00ff00", (1000,200,150,50),width=3)
         if pygame.mouse.get_pressed()[0] == 1:
             generate()
-    
-    elif check_mouse(1000, 400,50,150):
-        pygame.draw.rect(screen,"#00ff00", (1000,400,150,50),width=3)
-        if pygame.mouse.get_pressed()[0] == 1:
-            #show_path_bfs()
-            new_find_path_bfs()
 
     elif check_mouse(1000, 100,50,150):
-        pygame.draw.rect(screen,"#00ff00", (1000,400,150,50),width=3)
+        pygame.draw.rect(screen,"#00ff00", (1000,100,150,50),width=3)
         if pygame.mouse.get_pressed()[0] == 1:
             running = False
 
         
     if not True:
-    #pygame.draw.rect(screen,"#16e0bd",(230,140,700,200))
         font2 = pygame.font.SysFont('Arial',20)
-        screen.blit(font2.render("This program use Dfs to find the path ",True,(50,0,0,0)),(350,250))
-        screen.blit(font2.render("So this algorithm will give the path ",True,(50,0,0,0)),(360,280))
-        screen.blit(font2.render("But not the optimized one",True,(50,0,0,0)),(390,310))
+        
         
         
         
