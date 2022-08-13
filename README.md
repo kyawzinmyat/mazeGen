@@ -1,22 +1,40 @@
 # mazeGen
 
-generating 2d maze using randomized dfs
+--title Maze generator and solver
+--https://youtu.be/Dz6NYz66Sac
 
-can integrate with dfsmaze to find the path !!
-can now use BFS to find path !!
+-Generate 2 dimensional maze using randomised depth first search.
+
+-Start and end of the maze will be generated randomly 
+
+-Red indicate start and green indicate end
+
+-The progrma uses pygame to visualize the maze and path finding algorithms (dfs and bfs)
+
+-mazegen.py will generate the 2d maze with start and end 
+
+-game.py store the result of mazegen.py in the maze.csv file
+
+-each cell is simulated with 3x3 matrix
+
+-currently row and column cannot be set directly from pygame gui but can still change in the game.py
+
+-findpat.py provides two path finding algorithms including BFS and DFS
+
+-run game.py to start
+
+-generate new maze will create new maze
+
+-show path (dfs) will visualise the instant path with animation
+
+-show path (bfs) same as dfs one
+
+-show path 2 will visualise how DFS and BFS find a path with animation
 
 
-api
+requirement
+--pygame
 
-check run.py
 
-gen_maze function generate maze with optional parameter seed(start) and end  and run dfs inorder to gurantee that there is a path
-after generation the maze , its store in maze.csv file .
 
-run the game.py to visualize maze 
-need to install pygame
-
-inorder to set row and col , you need to change row and col variable in game.py and row and col must be the same
-
-Bfs is avaliable
 
