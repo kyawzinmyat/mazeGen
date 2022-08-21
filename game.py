@@ -15,8 +15,11 @@ start = False
 #screen = pygame.display.set_mode((max_width,max_height))
 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 
-row = 15
-col = 15
+global row
+row = 40
+
+global col
+col = 40
 
 def generate():
     try:
