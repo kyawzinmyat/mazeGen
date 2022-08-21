@@ -16,10 +16,10 @@ start = False
 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 
 global row
-row = 40
+row = 15
 
 global col
-col = 40
+col = 15
 
 def generate():
     try:
