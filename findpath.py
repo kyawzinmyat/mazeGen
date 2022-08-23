@@ -166,7 +166,6 @@ class Gbfs(Solve):
 	def __init__(self):
 		super().__init__(PQueueFrointer())
 		
-
 	def traverse(self,fill, exp):
 		self.stop_x, self.stop_y = self.maze.get_index_of(self.maze.stop)
 		self.explored = 0
@@ -176,7 +175,7 @@ class Gbfs(Solve):
 			current_index = self.frointer.remove()  # is in [m_dis [x, y]]
 			self.visited.append(current_index[1])
 			if exp:
-				self.explored += 1 
+				self.explored += 1
 			if self.check_is_end(current_index[1], fill):
 				if exp:
 					print(self.explored)
@@ -190,7 +189,32 @@ class Gbfs(Solve):
 		return False
 
 	
-	
+class Astar(Solve):
+	def __init__(self):
+		super().__init__(PQueueFrointer())
+		
+	def traverse(self,fill, exp):
+		self.stop_x, self.stop_y = self.maze.get_index_of(self.maze.stop)
+		self.explored = 0
+		self.frointer.push([0, self.maze.get_index_of(self.maze.start)])
+		self.nodelist.append(Node(None,self.maze.get_index_of(self.maze.start),self.maze.start))  # append start node		
+		while self.frointer:
+			current_index = self.frointer.remove()  # is in [m_dis [x, y]]
+			self.visited.append(current_index[1])
+			if exp:
+				self.explored += 1
+			if self.check_is_end(current_index[1], fill):
+				if exp:
+					print(self.explored)
+				return True
+			for adj_index in self.maze.get_index(current_index[1],shuffle = False):
+				if  adj_index not in self.visited:
+					# g_h = herustic + steps
+					g_h = abs(self.stop_x - adj_index[0]) + abs(self.stop_y - adj_index[1]) + (self.explored - 1)
+					if [g_h, adj_index] not in self.frointer.frointer:
+						self.nodelist.append(Node(current_index[1],adj_index,"_"))	
+						self.frointer.push([g_h, adj_index])
+		return False
 			
 m = [
 	["#"," "," "," "," "," "," "," "," "," "," ","E"],
@@ -204,3 +228,8 @@ m = [
 
 
 
+test = Astar()
+test.set_maze(m)
+test.solve(True, True)
+for i in test.maze.maze:
+	print(i)
