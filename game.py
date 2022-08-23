@@ -95,7 +95,6 @@ def draw_rect_by_indecies(list_of_indices,maze, delay = 10, color = None):
     while not is_break:
         for index in list_of_indices:
             if maze[index[0]][index[1]] != "A" and maze[index[0]][index[1]] != 'E':
-                print(maze[index[0]][index[1]] )
                 if not color:
                     color = (100,0,255,255)
                 width = 0
@@ -110,7 +109,7 @@ def new_find_path_bfs(show = False):
         maze = get_maze_list('maze2.csv')
         bfs = Bfs()
         bfs.set_maze(maze)
-        bfs.solve(fill = False)
+        bfs.solve(fill = False, exp=True)
         if show:
             draw_rect_by_indecies(bfs.visited, maze, 100, (233,0,230,50))
         draw_rect_by_indecies(bfs.get_indexlist()[::-1],maze) 
@@ -122,7 +121,7 @@ def new_find_path_dfs(show = False):
         maze = get_maze_list('maze2.csv')
         dfs = Dfs()
         dfs.set_maze(maze)
-        dfs.solve(fill = False)
+        dfs.solve(fill = False, exp=True)
         if show:
             draw_rect_by_indecies(dfs.visited, maze, 100, (233,0,230,50))
         draw_rect_by_indecies(dfs.get_indexlist()[::-1],maze) 

@@ -31,11 +31,10 @@ def solve_maze():
 
 if __name__ == '__main__':
     
-    maze = gen_maze()
+    maze = get_maze_list("maze2.csv")
     bfs = Bfs()
     bfs.set_maze(maze)
     bfs.solve()
-    bfs.maze.print()
     #solve_maze()
 
     

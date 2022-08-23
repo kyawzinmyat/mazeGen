@@ -30,7 +30,7 @@ class QueueFrointer(StackFrointer):
 		self.frointer = deque()
 
 	def remove(self):
-		self.frointer.popleft()
+		return self.frointer.popleft()
 
 
 
@@ -46,23 +46,20 @@ class Solve:
 		
 		
 
-	def traverse(self,fill):
-
+	def traverse(self,fill, exp):
+		self.explored = 0
 		self.frointer.push(self.maze.get_index_of(self.maze.start))
 		self.nodelist.append(Node(None,self.maze.get_index_of(self.maze.start),self.maze.start))  # append start node		
-
 		while self.frointer:
-
 			current_index = self.frointer.remove()  # is in list form 
-
-			self.visited.append(current_index) 
-
+			self.visited.append(current_index)
+			if exp:
+				self.explored += 1 
 			if self.check_is_end(current_index,fill):
+				if exp:
+					print(self.explored)
 				return True
-			
-				
-
-			for adj_index in self.maze.get_index(current_index,shuffle = False):
+			for adj_index in self.maze.get_index(current_index,shuffle = True):
 				if  adj_index not in self.visited and adj_index not in self.frointer.frointer:
 
 					self.nodelist.append(Node(current_index,adj_index,"_"))	
@@ -78,16 +75,12 @@ class Solve:
 
 	def check_is_end(self,current_index,fill):
 		if  self.maze.maze[current_index[0]][current_index[1]] ==self.maze.stop:## [0] is x [1] is y
-			print("found")
 			return self.get_path(fill)			
-
 		return False
 		
 
-	def solve(self,fill=True):
-
-		return self.traverse(fill)
-	
+	def solve(self,fill=True, exp = False):
+		return self.traverse(fill, exp)
 					
 
 	## find the actual path and make a list of index of that path
@@ -118,7 +111,6 @@ class Solve:
 
 		return self.fill_path(current,fill)
 
-	
 
 	## node list store node obj its has current and parent index and return the list of that pair		
 	def extract_index(self):
@@ -158,7 +150,6 @@ class Solve:
 		for i in self.visited:
 
 			temp[i[0]][i[1]]="☆"
-		self.maze.print(temp)
 
 
 
