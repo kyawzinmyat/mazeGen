@@ -1,8 +1,7 @@
 
 from collections import deque
 from maze import Maze	
-
-
+from heapq import heapify, heappop, heappush 
 
 
 class Node:
@@ -31,6 +30,15 @@ class QueueFrointer(StackFrointer):
 
 	def remove(self):
 		return self.frointer.popleft()
+
+
+class PQueueFrointer(StackFrointer):
+
+	def push(self, node):
+		heappush(self.frointer, node)
+	
+	def remove(self):
+		return heappop(self.frointer)
 
 
 
@@ -70,7 +78,11 @@ class Solve:
 
 	def set_maze(self,new_maze):
 
-		self.maze.maze=new_maze				
+		self.maze.maze=new_maze		
+
+
+	def set_maze_obj(self, new_maze_obj):
+		self.maze = new_maze_obj	
 					
 
 	def check_is_end(self,current_index,fill):
@@ -87,28 +99,19 @@ class Solve:
 
 	def  get_path(self,fill):
 		current=[]
-
 		parent =None
-
-		end = self.maze.get_index_of(self.maze.stop)		
-
+		end = self.maze.get_index_of(self.maze.stop)	
 		k = self.extract_index()
-
 		for node in reversed(k):
-
 			if node[0] == end:
 
 				current.append(node[0])
 				if not parent:
 
 					parent= node[1]
-
 			elif node[0] == parent:
-
 				current.append(node[0])
-
 				parent = node[1]
-
 		return self.fill_path(current,fill)
 
 
@@ -117,7 +120,6 @@ class Solve:
 
 		k=[]
 		for node in self.nodelist:
-
 			k.append([node.index,node.parent])
 
 		return k
@@ -129,9 +131,7 @@ class Solve:
 	def fill_path(self,index_list,fill):
 		if fill:
 			for i in index_list:
-
 				if self.maze.maze[i[0]][i[1]]==self.maze.blank:
-
 					self.maze.maze[i[0]][i[1]]=self.mark
 		self.index_list = index_list
 		return True
@@ -161,3 +161,46 @@ class Dfs(Solve):
 class Bfs(Solve):
 	def __init__(self):
 		super().__init__(QueueFrointer())
+
+class Gbfs(Solve):
+	def __init__(self):
+		super().__init__(PQueueFrointer())
+		
+
+	def traverse(self,fill, exp):
+		self.stop_x, self.stop_y = self.maze.get_index_of(self.maze.stop)
+		self.explored = 0
+		self.frointer.push([0, self.maze.get_index_of(self.maze.start)])
+		self.nodelist.append(Node(None,self.maze.get_index_of(self.maze.start),self.maze.start))  # append start node		
+		while self.frointer:
+			current_index = self.frointer.remove()  # is in [m_dis [x, y]]
+			self.visited.append(current_index[1])
+			if exp:
+				self.explored += 1 
+			if self.check_is_end(current_index[1], fill):
+				if exp:
+					print(self.explored)
+				return True
+			for adj_index in self.maze.get_index(current_index[1],shuffle = False):
+				if  adj_index not in self.visited:
+					m_dis = abs(self.stop_x - adj_index[0]) + abs(self.stop_y - adj_index[1])
+					if [m_dis, adj_index] not in self.frointer.frointer:
+						self.nodelist.append(Node(current_index[1],adj_index,"_"))	
+						self.frointer.push([m_dis, adj_index])
+		return False
+
+	
+	
+			
+m = [
+	["#"," "," "," "," "," "," "," "," "," "," ","E"],
+	["#"," ","#","#","#","#","#","#","#","#","#"," "],
+	["#"," ","#"," "," "," "," "," "," "," ","#"," "],
+	["#"," ","#"," ","#","#","#","#","#"," ","#"," "],
+	["#"," "," "," ","#"," "," "," "," "," ","#"," "],
+	["#","#","#"," ","#"," ","#","#","#","#","#"," "],
+	["A"," "," "," ","#"," "," "," "," "," "," "," "]
+]
+
+
+

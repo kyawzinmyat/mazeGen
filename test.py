@@ -1,4 +1,4 @@
-from findpath import Dfs,Bfs
+from findpath import Dfs,Bfs, Gbfs
 from mazegen import Maze
 
 
@@ -34,7 +34,19 @@ if __name__ == '__main__':
     maze = get_maze_list("maze2.csv")
     bfs = Bfs()
     bfs.set_maze(maze)
-    bfs.solve()
+    bfs.solve(True, True)
+
+
+    maze = get_maze_list("maze2.csv")
+    dfs = Dfs()
+    dfs.set_maze(maze)
+    dfs.solve(False, True)
+
+    maze = get_maze_list("maze2.csv")
+    test = Gbfs()
+    test.set_maze(maze)
+    test.solve(False, True)
+
     #solve_maze()
 
     
