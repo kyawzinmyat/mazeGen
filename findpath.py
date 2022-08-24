@@ -55,7 +55,7 @@ class Solve:
 		
 
 	def traverse(self,fill, exp):
-		self.explored = 0
+		self.explored = -1
 		self.frointer.push(self.maze.get_index_of(self.maze.start))
 		self.nodelist.append(Node(None,self.maze.get_index_of(self.maze.start),self.maze.start))  # append start node		
 		while self.frointer:
@@ -168,7 +168,7 @@ class Gbfs(Solve):
 		
 	def traverse(self,fill, exp):
 		self.stop_x, self.stop_y = self.maze.get_index_of(self.maze.stop)
-		self.explored = 0
+		self.explored = -1
 		self.frointer.push([0, self.maze.get_index_of(self.maze.start)])
 		self.nodelist.append(Node(None,self.maze.get_index_of(self.maze.start),self.maze.start))  # append start node		
 		while self.frointer:
@@ -195,7 +195,7 @@ class Astar(Solve):
 		
 	def traverse(self,fill, exp):
 		self.stop_x, self.stop_y = self.maze.get_index_of(self.maze.stop)
-		self.explored = 0
+		self.explored = -1
 		self.level = {tuple(self.maze.get_index_of(self.maze.start)) : 0}
 		self.frointer.push([0, self.maze.get_index_of(self.maze.start)])
 		self.nodelist.append(Node(None,self.maze.get_index_of(self.maze.start),self.maze.start))  # append start node		
@@ -220,7 +220,7 @@ class Astar(Solve):
 			heapify(self.frointer.frointer)
 		return False
 			
-m = [
+maze = [
 	["#"," "," "," "," "," "," "," "," "," "," ","E"],
 	["#"," ","#","#","#","#","#","#","#","#","#"," "],
 	["#"," ","#"," "," "," "," "," "," "," ","#"," "],
@@ -231,10 +231,3 @@ m = [
 ]
 
 
-
-test = Astar()
-test.set_maze(m)
-test.solve(True, True)
-print(test.level)
-for i in test.maze.maze:
-	print(i)

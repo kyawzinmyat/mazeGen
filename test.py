@@ -1,4 +1,4 @@
-from findpath import Dfs,Bfs, Gbfs
+from findpath import Dfs,Bfs, Gbfs, Astar
 from mazegen import Maze
 
 
@@ -18,37 +18,31 @@ def gen_maze():
 def solve_maze(): 
     gen_maze()
     maze = get_maze_list('maze1.csv')
-    dfs = Dfs()
-    dfs.set_maze(maze)
-    dfs.solve()
-    dfs.maze.print()
-    print(dfs.copy)
-    return dfs.maze.maze
-
-
-
-
-
-if __name__ == '__main__':
     
-    maze = get_maze_list("maze2.csv")
+    print("A*")
+    test = Astar()
+    test.set_maze(maze)
+    test.solve(False, True)
+
+    print("BFS")
     bfs = Bfs()
     bfs.set_maze(maze)
-    bfs.solve(True, True)
+    bfs.solve(False, True)
 
 
-    maze = get_maze_list("maze2.csv")
+    print("DFS")
     dfs = Dfs()
     dfs.set_maze(maze)
     dfs.solve(False, True)
 
-    maze = get_maze_list("maze2.csv")
-    test = Gbfs()
-    test.set_maze(maze)
-    test.solve(False, True)
+    print("GBFS")
+    gbfs = Gbfs()
+    gbfs.set_maze(maze)
+    gbfs.solve(False, True)
 
     #solve_maze()
 
     
-
+if __name__ == "__main__":
+    solve_maze()
 
