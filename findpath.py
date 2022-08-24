@@ -196,6 +196,7 @@ class Astar(Solve):
 	def traverse(self,fill, exp):
 		self.stop_x, self.stop_y = self.maze.get_index_of(self.maze.stop)
 		self.explored = 0
+		self.level = {tuple(self.maze.get_index_of(self.maze.start)) : 0}
 		self.frointer.push([0, self.maze.get_index_of(self.maze.start)])
 		self.nodelist.append(Node(None,self.maze.get_index_of(self.maze.start),self.maze.start))  # append start node		
 		while self.frointer:
@@ -210,10 +211,13 @@ class Astar(Solve):
 			for adj_index in self.maze.get_index(current_index[1],shuffle = False):
 				if  adj_index not in self.visited:
 					# g_h = herustic + steps
-					g_h = abs(self.stop_x - adj_index[0]) + abs(self.stop_y - adj_index[1]) + (self.explored - 1)
+					level = self.level[tuple(current_index[1])] + 1 #level is calculated based on the current node
+					g_h = abs(self.stop_x - adj_index[0]) + abs(self.stop_y - adj_index[1]) + (level)
 					if [g_h, adj_index] not in self.frointer.frointer:
+						self.level[tuple(adj_index)] = level
 						self.nodelist.append(Node(current_index[1],adj_index,"_"))	
 						self.frointer.push([g_h, adj_index])
+			heapify(self.frointer.frointer)
 		return False
 			
 m = [
@@ -231,5 +235,6 @@ m = [
 test = Astar()
 test.set_maze(m)
 test.solve(True, True)
+print(test.level)
 for i in test.maze.maze:
 	print(i)
